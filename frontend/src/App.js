@@ -1,69 +1,58 @@
-
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 
+// Import your page components
+import Home from './pages/Home';
+import ProductDetails from './pages/ProductDetails';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import UserProfile from './pages/UserProfile';
+
 function App() {
-  // return (
-  //   <div className="App">
-  //     <header className="App-header">
-  //       <img src={logo} className="App-logo" alt="logo" />
-  //       <p>
-  //         Edit <code>src/App.js</code> and save to reload.
-  //       </p>
-  //       <a
-  //         className="App-link"
-  //         href="https://reactjs.org"
-  //         target="_blank"
-  //         rel="noopener noreferrer"
-  //       >
-  //         Learn React
-  //       </a>
-  //     </header>
-  //   </div>
-  // );
-
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Fetch data from the Django API container
-    fetch('http://localhost:8000/api/products/')
-      .then(response => response.json())
-      .then(data => {
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error("Error fetching data from SweetSpree API:", error);
-        setLoading(false);
-      });
-  }, []);
-  
   return (
-    <div style={{ padding: '40px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Welcome to SweetSpree 🍰</h1>
-      <h3>Our Delicious Menu:</h3>
-      
-      {loading ? (
-        <p>Loading sweets...</p>
-      ) : (
-        <ul style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', padding: 0, listStyle: 'none', gap: '20px'}}>
-          {products.map(product => (
-            <li key={product.id} style={{ margin: '20px 0', fontSize: '18px', listStyle: 'none', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column'}}>
-                {product.image && (
-                    <img 
-                        src={product.image} 
-                        alt={product.name} 
-                        style={{ width: '150px', height: '150px', objectFit: 'cover', display: 'flex', marginBottom: '10px', maxWidth: '100%', height: 'auto' }} 
-                    />
-                )}
-                <strong>{product.name}</strong> - ${parseFloat(product.price).toFixed(2)}
-            </li>
-          ))}
-        </ul>
-      )}
+    <BrowserRouter>
+    <div className="app-container">
+      {/* This Navigation bar stays on the screen on every page */}
+      <nav className="navbar">
+        <div className="logo">SweetSpree 🍰</div>
+        <div className="nav-links">
+          <Link to="/">Home</Link>
+          <Link to="/about">About</Link>
+          <Link to="/contact">Contact</Link>
+          <Link to="/profile">Profile</Link>
+        </div>
+      </nav>
+
+      {/* The Routes block swaps out the component based on the URL */}
+      <main className="content-area">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/userProfile" element={<UserProfile />} />
+          {/* Dynamic route for viewing specific product details */}
+          <Route path="/product/:id" element={<ProductDetails />} />
+        </Routes>
+      </main>
     </div>
+
+    
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+    </BrowserRouter>
   );
 }
 

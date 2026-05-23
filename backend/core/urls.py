@@ -22,6 +22,7 @@ from products.models import Product
 from django.conf import settings
 from django.conf.urls.static import static
 from products.views import get_products
+from products.views import get_products, get_product
 
 
 def sample_products(request):
@@ -55,6 +56,7 @@ def api_welcome(request):
 urlpatterns = [
     path('admin/', admin.site.url_view if hasattr(admin, 'url_view') else admin.site.urls),
     path('api/products/', get_products),
+    path('api/products/<int:pk>/', get_product), #for retrieve data of single product
     path('', api_welcome),
 ]
 
